@@ -23,7 +23,8 @@
             background: linear-gradient(135deg, #ffeef8 0%, #ffe5f3 25%, #fff0f9 50%, #f8e8ff 75%, #ffe8f5 100%);
             background-size: 400% 400%;
             animation: gradientFlow 15s ease infinite;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
             position: relative;
             padding: 1rem;
         }
@@ -35,7 +36,7 @@
         }
 
         .sparkle {
-            position: absolute;
+            position: fixed;
             width: 4px;
             height: 4px;
             background: white;
@@ -43,6 +44,7 @@
             opacity: 0;
             animation: sparkleFloat 3s infinite;
             box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+            pointer-events: none;
         }
 
         @keyframes sparkleFloat {
@@ -64,6 +66,7 @@
             animation: containerFadeIn 1s ease-out;
             max-width: 600px;
             width: 100%;
+            padding: 2rem 0;
         }
 
         @keyframes containerFadeIn {
@@ -356,10 +359,11 @@
         }
 
         .heart {
-            position: absolute;
+            position: fixed;
             font-size: 20px;
             opacity: 0;
             animation: heartFloat 4s ease-in-out infinite;
+            pointer-events: none;
         }
 
         @keyframes heartFloat {
@@ -473,7 +477,7 @@
             </div>
         </div>
 
-        <p class="bottom-text">คบกันมา <span id="bottomDays">0</span> วันแล้ว</p>
+        <p class="bottom-text">คบกันมา <span id="bottomDays">0</span> ชั้นแล้ว</p>
         
         <a href="netflix-page.html" class="netflix-button">
             ดูความทรงจำของเรา 🎬
