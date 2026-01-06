@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Netflix</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background-color: #141414;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        .netflix-logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #e50914;
+            letter-spacing: 0.1em;
+            z-index: 10;
+            animation: logoFade 1s ease-out;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .netflix-logo:hover {
+            transform: scale(1.05);
+        }
+
+        @keyframes logoFade {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1rem;
+            animation: containerFade 1.2s ease-out;
+        }
+
+        @keyframes containerFade {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 500;
+            margin-bottom: 2.5rem;
+            color: #ffffff;
+            text-align: center;
+            animation: titleSlide 1s ease-out 0.3s both;
+        }
+
+        @keyframes titleSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .profiles-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .profile-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: profilePop 0.6s ease-out backwards;
+        }
+
+        .profile-card:nth-child(1) { animation-delay: 0.5s; }
+        .profile-card:nth-child(2) { animation-delay: 0.6s; }
+        .profile-card:nth-child(3) { animation-delay: 0.7s; }
+        .profile-card:nth-child(4) { animation-delay: 0.8s; }
+
+        @keyframes profilePop {
+            0% {
+                opacity: 0;
+                transform: scale(0.5) rotate(-10deg);
+            }
+            60% {
+                transform: scale(1.05) rotate(2deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        .profile-card:hover {
+            transform: scale(1.1);
+        }
+
+        .profile-card:hover .profile-avatar {
+            border-color: #e5e5e5;
+        }
+
+        .profile-avatar {
+            width: 140px;
+            height: 140px;
+            border-radius: 8px;
+            border: 3px solid transparent;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #e50914 0%, #b20710 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-avatar.profile-2 {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%);
+        }
+
+        .profile-avatar.profile-3 {
+            background: linear-gradient(135deg, #22c55e 0%, #15803d 100%);
+        }
+
+        .profile-avatar.profile-4 {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+
+        .profile-name {
+            margin-top: 0.8rem;
+            font-size: 1.1rem;
+            color: #808080;
+            text-align: center;
+            transition: color 0.3s ease;
+        }
+
+        .profile-card:hover .profile-name {
+            color: #e5e5e5;
+        }
+
+        .manage-profiles {
+            margin-top: 1rem;
+            padding: 0.8rem 2rem;
+            background: transparent;
+            border: 2px solid #808080;
+            color: #808080;
+            font-size: 1.15rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            animation: buttonSlide 1s ease-out 0.9s both;
+        }
+
+        @keyframes buttonSlide {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .manage-profiles:hover {
+            border-color: #e5e5e5;
+            color: #e5e5e5;
+            transform: scale(1.05);
+        }
+
+        .home-page {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #141414;
+            z-index: 100;
+            overflow-y: auto;
+            animation: videoFadeIn 0.5s ease-out;
+        }
+
+        @keyframes videoFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .home-page.active {
+            display: block;
+        }
+
+        .home-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            background: linear-gradient(to bottom, rgba(20,20,20,1) 0%, rgba(20,20,20,0.8) 70%, transparent 100%);
+            z-index: 102;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .home-netflix-logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #e50914;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .home-netflix-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .home-nav {
+            display: flex;
+            gap: 1.2rem;
+            font-size: 0.9rem;
+            color: #e5e5e5;
+        }
+
+        .nav-item {
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .nav-item:hover {
+            color: #b3b3b3;
+        }
+
+        .home-banner {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        .home-banner::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, rgba(20, 20, 20, 0.9) 0%, rgba(20, 20, 20, 0.4) 50%, transparent 70%),
+                        linear-gradient(to bottom, transparent 0%, rgba(20, 20, 20, 0.8) 80%, #141414 100%);
+            z-index: 0;
+        }
+
+        .banner-content {
+            padding: 2rem;
+            max-width: 500px;
+            z-index: 1;
+            animation: bannerSlide 1s ease-out;
+        }
+
+        @keyframes bannerSlide {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .series-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #e5e5e5;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .series-badge::before {
+            content: 'N';
+            background: #e50914;
+            color: white;
+            font-weight: 900;
+            padding: 0.2rem 0.4rem;
+            border-radius: 2px;
+            font-size: 1rem;
+        }
+
+        .banner-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .banner-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .stars {
+            color: #e50914;
+            letter-spacing: 0.2rem;
+        }
+
+        .year, .seasons {
+            color: #46d369;
+            font-weight: 600;
+        }
+
+        .banner-description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #e5e5e5;
+            margin-bottom: 1.5rem;
+            max-width: 450px;
+        }
+
+        .banner-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .play-btn, .info-btn {
+            padding: 0.8rem 1.8rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            transition: all 0.3s ease;
+        }
+
+        .play-btn {
+            background: white;
+            color: black;
+        }
+
+        .play-btn:hover {
+            background: rgba(255, 255, 255, 0.8);
+            transform: scale(1.05);
+        }
+
+        .info-btn {
+            background: rgba(109, 109, 110, 0.7);
+            color: white;
+        }
+
+        .info-btn:hover {
+            background: rgba(109, 109, 110, 0.5);
+            transform: scale(1.05);
+        }
+
+        .play-btn::before {
+            content: '▶';
+            font-size: 1.2rem;
+        }
+
+        .info-btn::before {
+            content: 'ℹ';
+            font-size: 1.5rem;
+        }
+
+        .banner-tabs {
+            display: flex;
+            gap: 2rem;
+            padding: 0 2rem;
+            border-bottom: 3px solid #2a2a2a;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .banner-tab {
+            padding: 1rem 0;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -3px;
+            transition: all 0.3s;
+            color: #808080;
+        }
+
+        .banner-tab:hover,
+        .banner-tab.active {
+            color: white;
+            border-bottom-color: #e50914;
+        }
+
+        .content-section {
+            padding: 2rem;
+            min-height: 50vh;
+        }
+
+        .content-row {
+            margin-bottom: 3rem;
+        }
+
+        .content-row h2 {
+            color: #e5e5e5;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .content-card {
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .content-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8);
+        }
+
+        .content-card-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.8) 100%);
+            display: flex;
+            align-items: flex-end;
+            padding: 1rem;
+        }
+
+        .content-card-title {
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .video-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            z-index: 200;
+        }
+
+        .video-container.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .video-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.2rem 1rem 3rem;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 70%, transparent 100%);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 201;
+            opacity: 1;
+            transition: opacity 0.3s;
+        }
+
+        .video-header.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .back-button {
+            width: 40px;
+            height: 40px;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+            font-weight: 300;
+        }
+
+        .back-button:hover {
+            transform: scale(1.1);
+        }
+
+        .video-title {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        .video-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #000;
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #000;
+        }
+
+        .video-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 0 1rem 1.5rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 50%, transparent 100%);
+            z-index: 201;
+            opacity: 1;
+            transition: opacity 0.3s;
+        }
+
+        .video-controls.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .progress-container {
+            width: 100%;
+            padding: 1rem 0 1.5rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 5px;
+            background-color: rgba(255, 255, 255, 0.25);
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #e50914;
+            border-radius: 2px;
+            width: 0%;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            right: -6px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            background-color: #e50914;
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(229, 9, 20, 0.8);
+        }
+
+        .controls-buttons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .play-pause-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+            width: 50px;
+            height: 50px;
+        }
+
+        .play-pause-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .time-display {
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .fullscreen-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.5rem;
+            padding: 0.5rem;
+            transition: transform 0.2s;
+        }
+
+        .fullscreen-btn:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .netflix-logo {
+                font-size: 2rem;
+                top: 15px;
+                left: 15px;
+            }
+
+            .title {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+            }
+
+            .profiles-grid {
+                gap: 1.2rem;
+            }
+
+            .profile-avatar {
+                width: 120px;
+                height: 120px;
+                font-size: 3rem;
+            }
+
+            .banner-title {
+                font-size: 2rem;
+            }
+
+            .banner-description {
+                font-size: 1rem;
+            }
+
+            .play-pause-btn {
+                font-size: 2rem;
+                width: 40px;
+                height: 40px;
+            }
+
+            .home-nav {
+                display: none;
+            }
+
+            .banner-tabs {
+                padding: 0 1.5rem;
+                gap: 1.5rem;
+                font-size: 0.9rem;
+                overflow-x: auto;
+            }
+
+            .content-section {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .banner-title {
+                font-size: 1.8rem;
+            }
+
+            .controls-buttons {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="netflix-logo" onclick="backToProfiles()">NETFLIX</div>
+
+    <div class="container" id="profileSelection">
+        <h1 class="title">Who's watching?</h1>
+        
+        <div class="profiles-grid">
+            <div class="profile-card" onclick="selectProfile(1)">
+                <div class="profile-avatar">
+                    <img src="images/profile1.jpg" alt="i luv ouan">
+                </div>
+                <div class="profile-name">i luv ouan</div>
+            </div>
+            
+            <div class="profile-card" onclick="selectProfile(2)">
+                <div class="profile-avatar profile-2">
+                    <img src="images/profile2.jpg"alt="i luv ouan">
+                </div>
+                
+                <div class="profile-name">next time</div>
+            </div>
+            
+            <div class="profile-card" onclick="selectProfile(3)">
+                <div class="profile-avatar profile-3">💚</div>
+                <div class="profile-name">comming soon...</div>
+            </div>
+            
+            <div class="profile-card" onclick="selectProfile(4)">
+                <div class="profile-avatar profile-4">🧡</div>
+                <div class="profile-name">comming soon...</div>
+            </div>
+        </div>
+
+        <button class="manage-profiles">MANAGE PROFILES</button>
+    </div>
+
+    <div class="home-page" id="homePage1">
+        <div class="home-header">
+            <div class="home-netflix-logo" onclick="backToProfiles()">NETFLIX</div>
+            <nav class="home-nav">
+                <span class="nav-item">Home</span>
+                <span class="nav-item">TV Shows</span>
+                <span class="nav-item">Movies</span>
+                <span class="nav-item">My List</span>
+            </nav>
+        </div>
+
+        <div class="home-banner" style="background-image: url('images/banner1.jpg');">
+            <div class="banner-content">
+                <div class="series-badge">SERIES</div>
+                <h1 class="banner-title">WEEKEND VLOG</h1>
+                <div class="banner-meta">
+                    <span class="stars">★★★★★</span>
+                    <span class="year">28 DAYS</span>
+                    <span class="seasons">ALL SEASONS</span>
+                </div>
+                <p class="banner-description">
+                    When your life is filled with tears and sadness, please know that having me in your life will bring you happiness and make you smile, because your smile is my happiness too, my love.
+                </p>
+                <div class="banner-buttons">
+                    <button class="play-btn" onclick="playVideo(1)">Play</button>
+                    <button class="info-btn">More info</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="banner-tabs">
+            <div class="banner-tab active">Overview</div>
+            <div class="banner-tab">Episodes</div>
+            <div class="banner-tab">Trailers & More</div>
+            <div class="banner-tab">More like this</div>
+        </div>
+
+        <div class="content-section">
+            <div class="content-row">
+                <h2>Watch Again</h2>
+                <div class="content-grid">
+                    <div class="content-card" onclick="playVideo(1)">
+                        <div class="content-card-overlay">
+                            <div class="content-card-title">Memories 💚</div>
+                        </div>
+                    </div>
+                    <div class="content-card" onclick="playVideo(1)">
+                        <div class="content-card-overlay">
+                            <div class="content-card-title">Love Journey</div>
+                        </div>
+                    </div>
+                    <div class="content-card" onclick="playVideo(1)">
+                        <div class="content-card-overlay">
+                            <div class="content-card-title">Best Moments</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="home-page" id="homePage2">
+        <div class="home-header">
+            <div class="home-netflix-logo" onclick="backToProfiles()">NETFLIX</div>
+            <nav class="home-nav">
+                <span class="nav-item">Home</span>
+                <span class="nav-item">TV Shows</span>
+                <span class="nav-item">Movies</span>
+                <span class="nav-item">My List</span>
+            </nav>
+        </div>
+
+        <div class="home-banner" style="background-image: url('images/banner2.jpg');">
+            <div class="banner-content">
+                <div class="series-badge">SERIES</div>
+                <h1 class="banner-title">OUR MOMENTS</h1>
+                <div class="banner-meta">
+                    <span class="stars">★★★★★</span>
+                    <span class="year">2024</span>
+                    <span class="seasons">SEASON 2</span>
+                </div>
+                <p class="banner-description">
+                    Every moment with you is a treasure. From sunrise to sunset, your presence makes everything beautiful. Thank you for being my sunshine on cloudy days.
+                </p>
+                <div class="banner-buttons">
+                    <button class="play-btn" onclick="playVideo(2)">Play</button>
+                    <button class="info-btn">More info</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="banner-tabs">
+            <div class="banner-tab active">Overview</div>
+            <div class="banner-tab">Episodes</div>
+            <div class="banner-tab">Trailers & More</div>
+            <div class="banner-tab">More like this</div>
+        </div>
+
+        <div class="content-section">
+            <div class="content-row">
+                <h2>Trending Now</h2>
+                <div class="content-grid">
+                    <div class="content-card" onclick="playVideo(2)">
+                        <div class="content-card-overlay">
+                            <div class="content-card-title">Happy Times 💙</div>
+                        </div>
+                    </div>
+                    <div class="content-card" onclick="playVideo(2)">
+                        <div class="content-card-overlay">
+                            <div class="content-card-title">Beautiful Days</div>
+                        </div>
+                    </div>
+                    <div class="content-card" onclick="playVideo(2)">
+                        <div class="content-card-overlay">
+                            <div class="content-card-title">Precious Moments</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="home-header">
+            <div class="home-netflix-logo" onclick="backToProfiles()">NETFLIX</div>
+            <nav class="home-nav">
+                <span class="nav-item">Home</span>
+                <span class="nav-item">TV Shows</span>
+                <span class="nav-item">Movies</span>
+                <span class="nav-item">My List</span>
+            </nav>
+        </div>
+
+        <div class="home-banner" style="background-image: url('images/banner3.jpg');">
+            <div class="banner-content">
+                <div class="series-badge">SERIES</div>
+                <h1 class="banner-title">LOVE DIARY</h1>
+                <div class="banner-meta">
+                    <span class="stars">★★★★★</span>
+                    <span class="year">2024</span>
+                    <span class="seasons">SEASON 3</span>
+                </div>
+                <p class="banner-description">
+                    A collection of sweet memories and cherished moments. Each day with you writes a new chapter in our beautiful love story. Forever grateful for you.
+                </p>
+                <div class="banner-buttons">
+                    <button class="play-btn" onclick="playVideo(3)">Play</button>
+                    <button class="info-btn">More info</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="banner-tabs">
+            <div class="banner-tab active">Overview</div>
+            <div class="banner-tab">Episodes</div>
+            <div class="banner-tab">Trailers & More</div>
+            <div class="banner-tab">More like this</div>
+        </div>
+
+        <div class="content-section"></div>
+    </div>
+
+    <div class="home-page" id="homePage4">
+        <div class="home-header">
+            <div class="home-netflix-logo" onclick="backToProfiles()">NETFLIX</div>
+            <nav class="home-nav">
+                <span class="nav-item">Home</span>
+                <span class="nav-item">TV Shows</span>
+                <span class="nav-item">Movies</span>
+                <span class="nav-item">My List</span>
+            </nav>
+        </div>
+
+        <div class="home-banner" style="background-image: url('images/banner4.jpg');">
+            <div class="banner-content">
+                <div class="series-badge">SERIES</div>
+                <h1 class="banner-title">TOGETHER</h1>
+                <div class="banner-meta">
+                    <span class="stars">★★★★★</span>
+                    <span class="year">2024</span>
+                    <span class="seasons">SEASON 4</span>
+                </div>
+                <p class="banner-description">
+                    Through ups and downs, laughter and tears, we've grown stronger together. You are my everything, my reason to smile, my forever love.
+                </p>
+                <div class="banner-buttons">
+                    <button class="play-btn" onclick="playVideo(4)">Play</button>
+                    <button class="info-btn">More info</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="banner-tabs">
+            <div class="banner-tab active">Overview</div>
+            <div class="banner-tab">Episodes</div>
+            <div class="banner-tab">Trailers & More</div>
+            <div class="banner-tab">More like this</div>
+        </div>
+
+        <div class="content-section"></div>
+    </div>
+
+    <div class="video-container" id="videoPlayer">
+        <div class="video-header" id="videoHeader">
+            <button class="back-button" onclick="backToHome()">‹</button>
+            <div class="video-title" id="videoTitleText">S1:E1 "Moment"</div>
+        </div>
+
+        <div class="video-wrapper" onclick="toggleControls()">
+            <video id="mainVideo" onclick="togglePlayPause()"></video>
+        </div>
+
+        <div class="video-controls" id="videoControls">
+            <div class="progress-container">
+                <div class="progress-bar" onclick="seekVideo(event)">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+            
+            <div class="controls-buttons">
+                <button class="play-pause-btn" id="playPauseBtn" onclick="togglePlayPause()">▶</button>
+                <span class="time-display">
+                    <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
+                </span>
+                <button class="fullscreen-btn" onclick="toggleFullscreen()">⛶</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let videoElement = document.getElementById('mainVideo');
+        let controlsTimeout;
+        let currentProfile = 1;
+
+        const profileTitles = {
+            1: 'S1:E1 "Weekend Vlog"',
+            2: 'S2:E1 "Our Moments"',
+            3: 'S3:E1 "Love Diary"',
+            4: 'S4:E1 "Together"'
+        };
+
+        // กำหนด path ของไฟล์ MP4 สำหรับแต่ละ profile
+        const videoFiles = {
+            1: 'videos/video1.mp4',
+            2: 'videos/video2.mp4',
+            3: 'videos/video3.mp4',
+            4: 'videos/video4.mp4'
+        };
+
+        function selectProfile(profileNumber) {
+            currentProfile = profileNumber;
+            document.getElementById('profileSelection').style.animation = 'containerFade 0.5s ease-out reverse';
+            
+            setTimeout(() => {
+                document.getElementById('profileSelection').style.display = 'none';
+                document.getElementById('homePage' + profileNumber).classList.add('active');
+            }, 500);
+        }
+
+        function backToProfiles() {
+            for(let i = 1; i <= 4; i++) {
+                document.getElementById('homePage' + i).classList.remove('active');
+            }
+            
+            document.getElementById('videoPlayer').classList.remove('active');
+            videoElement.pause();
+            videoElement.currentTime = 0;
+            
+            document.getElementById('profileSelection').style.display = 'flex';
+            document.getElementById('profileSelection').style.animation = 'containerFade 0.5s ease-out';
+        }
+
+        function playVideo(profileNumber) {
+            currentProfile = profileNumber;
+            document.getElementById('videoTitleText').textContent = profileTitles[profileNumber];
+            
+            // ตั้งค่า video source จากโฟลเดอร์
+            videoElement.src = videoFiles[profileNumber];
+            
+            // แสดง video player
+            document.getElementById('homePage' + profileNumber).classList.remove('active');
+            document.getElementById('videoPlayer').classList.add('active');
+            
+            // เล่นวิดีโอออัตโนมัติ
+            videoElement.play();
+            document.getElementById('playPauseBtn').textContent = '⏸';
+        }
+
+        function backToHome() {
+            videoElement.pause();
+            videoElement.currentTime = 0;
+            document.getElementById('videoPlayer').classList.remove('active');
+            document.getElementById('homePage' + currentProfile).classList.add('active');
+            document.getElementById('progressFill').style.width = '0%';
+        }
+
+        function togglePlayPause() {
+            if (videoElement.paused) {
+                videoElement.play();
+                document.getElementById('playPauseBtn').textContent = '⏸';
+            } else {
+                videoElement.pause();
+                document.getElementById('playPauseBtn').textContent = '▶';
+            }
+        }
+
+        function seekVideo(event) {
+            const progressBar = event.currentTarget;
+            const clickX = event.offsetX;
+            const width = progressBar.offsetWidth;
+            const percentage = (clickX / width);
+            
+            videoElement.currentTime = percentage * videoElement.duration;
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        function updateDuration() {
+            document.getElementById('duration').textContent = formatTime(videoElement.duration);
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.getElementById('videoPlayer').requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        function toggleControls() {
+            const header = document.getElementById('videoHeader');
+            const controls = document.getElementById('videoControls');
+            
+            if (header.classList.contains('hide')) {
+                header.classList.remove('hide');
+                controls.classList.remove('hide');
+            } else {
+                header.classList.add('hide');
+                controls.classList.add('hide');
+            }
+            
+            clearTimeout(controlsTimeout);
+            if (!header.classList.contains('hide')) {
+                controlsTimeout = setTimeout(() => {
+                    if (!videoElement.paused) {
+                        header.classList.add('hide');
+                        controls.classList.add('hide');
+                    }
+                }, 3000);
+            }
+        }
+
+        videoElement.addEventListener('timeupdate', () => {
+            const percentage = (videoElement.currentTime / videoElement.duration) * 100;
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('currentTime').textContent = formatTime(videoElement.currentTime);
+        });
+
+        videoElement.addEventListener('play', () => {
+            controlsTimeout = setTimeout(() => {
+                document.getElementById('videoHeader').classList.add('hide');
+                document.getElementById('videoControls').classList.add('hide');
+            }, 3000);
+        });
+
+        videoElement.addEventListener('pause', () => {
+            clearTimeout(controlsTimeout);
+            document.getElementById('videoHeader').classList.remove('hide');
+            document.getElementById('videoControls').classList.remove('hide');
+        });
+
+        videoElement.addEventListener('loadedmetadata', () => {
+            updateDuration();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('videoPlayer').classList.contains('active')) {
+                if (e.code === 'Space') {
+                    e.preventDefault();
+                    togglePlayPause();
+                } else if (e.code === 'ArrowLeft') {
+                    videoElement.currentTime -= 10;
+                } else if (e.code === 'ArrowRight') {
+                    videoElement.currentTime += 10;
+                } else if (e.code === 'KeyF') {
+                    toggleFullscreen();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
